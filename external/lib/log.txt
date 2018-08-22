@@ -1,0 +1,7 @@
+execve("./triangle", ["./triangle"], [/* 58 vars */]) = -1 ENOEXEC (Exec format error)
+fstat64(2, {st_mode=S_IFREG|0644, st_size=98, ...}) = 0
+write(2, "strace: exec: Exec format error\n", 32strace: exec: Exec format error
+) = 32
+getpid()                                = 897
+exit_group(1)                           = ?
++++ exited with 1 +++

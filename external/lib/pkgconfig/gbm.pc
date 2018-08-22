@@ -1,0 +1,12 @@
+prefix=/home/pi/mesa-build/prefix
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: gbm
+Description: Mesa gbm library
+Requires.private: 
+Version: 18.2.0-devel
+Libs: -L${libdir} -lgbm
+Libs.private: -ldl
+Cflags: -I${includedir}
