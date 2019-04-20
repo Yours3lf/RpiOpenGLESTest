@@ -2,8 +2,8 @@
 
 //#define USE_PBUFFER //works without x11, but not remotely
 //#define USE_X11 //needs x11 (desktop ofc)
-#define USE_KMS //works remotely
-//#define USE_SURFACELESS //works remotely
+//#define USE_KMS //works remotely
+#define USE_SURFACELESS //works remotely
 
 #include <gbm.h>
 #include <drm/drm.h>
@@ -65,26 +65,22 @@ static const EGLint contextAttribs[] =
 // three vertex positions
 static const GLfloat vertices[] =
 {
-	-1.0f, -1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
-	0.0f,  1.0f, 0.0f,
+	-1, -1,
+	1, -1,
+	0, 1
 };
 
 // The following are GLSL shaders for rendering a triangle on the screen
-#define STRINGIFY(x) #x
-static const char* vertexShaderCode = STRINGIFY(
-			attribute vec3 pos;
-		void main(){
-		gl_Position = vec4(pos, 1.0);
-		}
-		);
+static const char* vertexShaderCode =
+"#version 100\n"
+"precision highp float;\n"
+"attribute vec2 vertex;\n"
+"void main(){ gl_Position = vec4(vertex, 0.0, 1.0); }\n";
 
-static const char* fragmentShaderCode = STRINGIFY(
-			uniform vec4 color;
-		void main() {
-		gl_FragColor = vec4(color);
-		}
-		);
+static const char* fragmentShaderCode =
+"#version 100\n"
+"precision mediump float;\n"
+"void main() { gl_FragColor = vec4(0.8, 0.3, 0.5, 1.0); }\n";
 
 #ifdef USE_KMS
 struct kms
@@ -440,6 +436,7 @@ int main(int argv, char** argc)
 
 	// Set GL Viewport size, always needed!
 	glViewport(0, 0, displayWidth, displayHeight);
+	glScissor(0, 0, displayWidth, displayHeight);
 
 	// Get GL Viewport size and test if it is correct.
 	// NOTE! DO NOT UPDATE EGL LIBRARY ON RASPBERRY PI AS IT WILL INSTALL FAKE EGL!
@@ -452,7 +449,7 @@ int main(int argv, char** argc)
 	printf("GL Viewport size: %dx%d\n", viewport[2], viewport[3]);
 
 	// Clear whole screen (front buffer)
-	glClearColor(0.8f, 0.2f, 0.5f, 1.0f);
+	glClearColor(0.4f, 0.6f, 0.9f, 1.0f);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 #ifdef USE_SURFACELESS
@@ -469,49 +466,72 @@ int main(int argv, char** argc)
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 #endif
 
-	/*
 	// Create a shader program
 	// NO ERRRO CHECKING IS DONE! (for the purpose of this example)
 	// Read an OpenGL tutorial to properly implement shader creation
 	program = glCreateProgram();
-	glUseProgram(program);
 	vert = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vert, 1, &vertexShaderCode, NULL);
+	unsigned vertlen = strlen(vertexShaderCode);
+	glShaderSource(vert, 1, &vertexShaderCode, &vertlen);
 	glCompileShader(vert);
+	GLint success = 0;
+	glGetShaderiv(vert, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(vert, GL_INFO_LOG_LENGTH, &maxLength);
+		char* errorLog = malloc(maxLength);
+		glGetShaderInfoLog(vert, maxLength, &maxLength, &errorLog[0]);
+		printf("%s\n", errorLog);
+		free(errorLog);
+	}
 	frag = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(frag, 1, &fragmentShaderCode, NULL);
+	unsigned fraglen = strlen(fragmentShaderCode);
+	glShaderSource(frag, 1, &fragmentShaderCode, &fraglen);
 	glCompileShader(frag);
+	glGetShaderiv(frag, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(frag, GL_INFO_LOG_LENGTH, &maxLength);
+		char* errorLog = malloc(maxLength);
+		glGetShaderInfoLog(frag, maxLength, &maxLength, &errorLog[0]);
+		printf("%s\n", errorLog);
+		free(errorLog);
+	}
 	glAttachShader(program, frag);
 	glAttachShader(program, vert);
 	glLinkProgram(program);
+	GLint isLinked = 0;
+	glGetProgramiv(program, GL_LINK_STATUS, (int *)&isLinked);
+	if (isLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+		char* errorLog = malloc(maxLength);
+		glGetShaderInfoLog(program, maxLength, &maxLength, &errorLog[0]);
+		printf("%s\n", errorLog);
+		free(errorLog);
+	}
 	glUseProgram(program);
 
 	// Create Vertex Buffer Object
 	// Again, NO ERRRO CHECKING IS DONE! (for the purpose of this example)
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-	// Get vertex attribute and uniform locations
-	posLoc = glGetAttribLocation(program, "pos");
-	colorLoc = glGetUniformLocation(program, "color");
-
-	// Set the desired color of the triangle to pink
-	// 100% red, 0% green, 50% blue, 100% alpha
-	glUniform4f(colorLoc, 1.0, 0.0f, 0.5, 1.0);
+	glBufferData(GL_ARRAY_BUFFER, 3 * 2 * sizeof(float), vertices, GL_STATIC_DRAW);
 
 	// Set our vertex data
-	glEnableVertexAttribArray(posLoc);
+	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	*/
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 	int counter = 0;
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Render a triangle consisting of 3 vertices:
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		counter++;
 
@@ -528,6 +548,10 @@ int main(int argv, char** argc)
 		fwrite(buffer, 1, displayWidth * displayHeight * 3, output);
 		fclose(output);
 		free(buffer);
+
+#ifndef USE_SURFACELESS
+		eglSwapBuffers(display, surface);
+#endif
 	}
 
 
