@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.5.2, 2020-05-13T20:46:37. -->
+<!-- Written by QtCreator 4.5.2, 2020-05-15T23:36:05. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -317,6 +317,7 @@
        <value type="QString">/home/yours3lf/Documents/oglestest/build/ogles-without-x</value>
        <value type="QString">/home/yours3lf/Documents/oglestest/build/triangle</value>
        <value type="QString">/home/yours3lf/Documents/oglestest/build/ogles-without-x</value>
+       <value type="QString">/home/yours3lf/Documents/oglestest/build/ogles-without-x</value>
        <value type="QString">/home/yours3lf/Documents/oglestest/build/triangle</value>
        <value type="QString">/home/yours3lf/Documents/build-oglestest-ext4-Debug/triangle</value>
        <value type="QString">/home/yours3lf/Documents/oglestest/build/ogles-without-x</value>
@@ -327,12 +328,14 @@
        <value type="QString">192.168.1.5</value>
        <value type="QString">192.168.0.12</value>
        <value type="QString">192.168.1.2</value>
+       <value type="QString">192.168.1.12</value>
        <value type="QString">192.168.0.15</value>
        <value type="QString">192.168.0.12</value>
        <value type="QString">192.168.1.6</value>
        <value type="QString">192.168.0.15</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedRemotePaths">
+       <value type="QString">.</value>
        <value type="QString">.</value>
        <value type="QString">.</value>
        <value type="QString">.</value>
@@ -351,12 +354,14 @@
        <value type="QString">/home/yours3lf/Documents/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot</value>
        <value type="QString">/home/yours3lf/Documents/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot</value>
        <value type="QString">/home/yours3lf/Documents/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot</value>
+       <value type="QString">/home/yours3lf/Documents/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/arm-linux-gnueabihf/sysroot</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedTimes">
        <value type="QDateTime">2019-04-20T15:56:19</value>
        <value type="QDateTime">2019-09-25T09:00:12</value>
        <value type="QDateTime">2018-09-27T20:16:29</value>
        <value type="QDateTime">2019-12-15T19:30:10</value>
+       <value type="QDateTime">2020-05-15T23:31:38</value>
        <value type="QDateTime">2019-04-21T12:08:56</value>
        <value type="QDateTime">2018-04-28T11:07:41</value>
        <value type="QDateTime">2020-05-12T21:59:22</value>
